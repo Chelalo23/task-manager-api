@@ -1,9 +1,15 @@
-import { Request, Response } from "express";
-import { registerUser, loginUser } from "../services/auth.service";
 
-export async function register(req: Request, res: Response) {
+import { Request, Response, NextFunction } from "express";
+import { registerUser, loginUser } from "../services/auth.service";
+import { AppError } from "../middlewares/error.middleware";
+
+export async function register(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
     try {
-        const {nombre, email, password} = req.body;
+        const { nombre, email, password } = req.body;
 
         const user = await registerUser(nombre, email, password);
 
@@ -11,43 +17,37 @@ export async function register(req: Request, res: Response) {
             message: "Usuario registrado correctamente",
             user
         });
-    }catch (error) {
+    } catch (error) {
         if (
-            error instanceof Error && error.message === "El correo ya está registrado") {
-            return res.status(409).json({
-                message: error.message
-            });
+            error instanceof Error &&
+            error.message === "El correo ya está registrado"
+        ) {
+            return next(new AppError(error.message, 409));
         }
 
-        console.error(error);
-
-        return res.status(500).json({
-            message: "Error interno del servidor"
-        });
+        return next(error);
     }
 }
 
-export async function login(req: Request, res: Response) {
+export async function login(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
 
         const result = await loginUser(email, password);
 
         return res.status(200).json(result);
-    }catch (error) {
+    } catch (error) {
         if (
             error instanceof Error &&
             error.message === "Credenciales inválidas"
         ) {
-            return res.status(401).json({
-                message: "Correo o contraseña incorrectos"
-            });
+            return next(new AppError("Correo o contraseña incorrectos", 401));
         }
 
-        console.error(error);
-
-        return res.status(500).json({
-            message: "Error interno del servidor"
-        });
+        return next(error);
     }
 }

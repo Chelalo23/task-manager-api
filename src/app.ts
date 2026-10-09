@@ -3,12 +3,20 @@ import { pool } from "./config/db";
 import { config } from "./config/env";
 import authRoutes from "./api/auth.routes";
 import { authenticateToken, AuthRequest } from "./middlewares/auth.middleware";
+import taskRoutes from "./api/task.routes";
+import { errorMiddleware } from "./middlewares/error.middleware";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 
 const app = express();
 
 app.use(express.json());
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use("/auth", authRoutes);
+
+app.use("/tasks", taskRoutes);
 
 app.get("/auth/profile", authenticateToken, (req, res) => {
   const authReq = req as AuthRequest;
@@ -36,6 +44,7 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.use(errorMiddleware);
 
 app.listen(config.port, () => {
   console.log(`Servidor ejecutándose en http://localhost:${config.port}`);

@@ -57,7 +57,7 @@ export async function loginUser(
         },
         config.jwtSecret,
         {
-            expiresIn: "1h"
+            expiresIn: config.jwtExpiresIn as jwt.SignOptions["expiresIn"]
         }
     );
 
