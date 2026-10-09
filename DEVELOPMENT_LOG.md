@@ -68,34 +68,55 @@
 
 ## 3. Uso de inteligencia artificial
 
-Se utilizó inteligencia artificial como herramienta de apoyo durante el desarrollo para comprender conceptos, revisar implementaciones, resolver errores y mejorar la documentación.
+Se utilizó ChatGPT como herramienta de apoyo para comprender conceptos, implementar funcionalidades, analizar errores y verificar el comportamiento de la API. Las sugerencias se revisaron antes de incorporarlas al proyecto y se contrastaron con pruebas de compilación y solicitudes HTTP.
 
-Las sugerencias se aplicaron al proyecto y se verificaron mediante la compilación de TypeScript y solicitudes HTTP de prueba.
+### 3.1. Consultas y prompts
 
-### 3.1. Consultas realizadas durante el desarrollo
+El historial disponible no constituye una transcripción literal completa de todas las consultas realizadas durante el desarrollo. Por transparencia, no se presentan reconstrucciones como si fueran citas exactas.
 
-A continuación se describen los temas consultados durante el proceso. Esta sección contiene resúmenes de las consultas, no una transcripción literal completa del historial.
+Los principales temas de consulta fueron:
 
-1. Implementación y pruebas de las operaciones CRUD de tareas.
-2. Integración de validaciones con Zod en los controladores.
-3. Implementación de un sistema centralizado de manejo de errores.
-4. Configuración de Swagger y documentación de los endpoints.
-5. Corrección de la configuración de variables de entorno y expiración del JWT.
-6. Elaboración y revisión del archivo README.
-7. Verificación de la autenticación y protección de rutas mediante JWT.
+- Implementación y comprobación del CRUD de tareas.
+- Validación de solicitudes mediante Zod.
+- Protección de rutas con JWT y comprobación de permisos por usuario.
+- Manejo centralizado de errores.
+- Configuración y documentación de Swagger.
+- Diagnóstico de errores de compilación y configuración de variables de entorno.
+- Preparación de la documentación del proyecto.
 
-### 3.2. Revisión y verificación del código generado con apoyo de IA
+Para la entrega, las consultas que puedan recuperarse literalmente del historial deben registrarse como prompts exactos, indicando qué parte del código se aceptó, modificó o rechazó y cómo se verificó el resultado.
 
-Las modificaciones se comprobaron mediante diferentes verificaciones:
+### 3.2. Decisiones sobre las sugerencias de IA
 
-- Ejecución de `npm.cmd run build` para comprobar la compilación de TypeScript.
-- Pruebas de registro e inicio de sesión.
-- Pruebas de acceso a una ruta protegida sin token y con token.
-- Pruebas de creación, consulta, actualización y eliminación de tareas.
-- Envío de datos inválidos para verificar las respuestas de validación.
-- Consulta de tareas inexistentes para verificar el manejo de errores.
-- Revisión de la documentación de Swagger.
-- Consulta del endpoint principal para comprobar la conexión con PostgreSQL.
+**Decisión 1. Corrección de la configuración JWT**
+
+- **Problema:** La configuración inicial no leía correctamente la variable `JWT_EXPIRES_IN` y presentaba un error al generar tokens.
+- **Acción:** Se corrigió la inicialización del patrón Singleton y la lectura de la variable de expiración. También se ajustó la opción `expiresIn` al generar el token.
+- **Resultado:** Se ejecutó la compilación de TypeScript y se comprobó que el inicio de sesión generara un token correctamente.
+- **Evaluación:** Se aceptó la corrección después de verificar su funcionamiento.
+
+**Decisión 2. Protección de las tareas por propietario**
+
+- **Problema:** Era necesario evitar que un usuario pudiera consultar, modificar o eliminar las tareas de otra cuenta.
+- **Acción:** Se verificó el comportamiento de las operaciones protegidas utilizando dos usuarios diferentes y sus respectivos tokens.
+- **Resultado:** Las solicitudes del segundo usuario para consultar, modificar y eliminar una tarea ajena devolvieron `404 Tarea no encontrada`. El propietario pudo consultar la tarea y se comprobó que continuaba intacta.
+- **Evaluación:** Se mantuvo la implementación después de comprobar su comportamiento mediante solicitudes HTTP.
+
+### 3.3. Verificación del código
+
+Las verificaciones realizadas durante el desarrollo incluyeron:
+
+- `npm.cmd run build` para comprobar la compilación de TypeScript.
+- Registro e inicio de sesión de usuarios.
+- Acceso a rutas protegidas con y sin token.
+- Validación de datos incorrectos en las tareas.
+- Pruebas de creación, consulta, actualización y eliminación.
+- Pruebas de aislamiento de tareas entre usuarios.
+- Consulta de la documentación Swagger.
+- Comprobación del endpoint principal y de la conexión con PostgreSQL.
+
+Las verificaciones descritas corresponden a pruebas ejecutadas durante el desarrollo. No implican que se haya realizado una suite automatizada completa.
+
 
 ## 4. Dificultades encontradas y soluciones aplicadas
 

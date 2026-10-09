@@ -48,11 +48,37 @@ Instala las dependencias:
 npm install
 ```
 
-## Configuración de PostgreSQL
+## ## Configuración de PostgreSQL
 
-Crea una base de datos llamada `task_manager_db` en PostgreSQL.
+Crea una base de datos llamada `task_manager_db` desde PostgreSQL.
 
-Después, crea las tablas `users` y `tasks` con la estructura definida para el proyecto. La tabla `tasks` debe relacionarse con `users` mediante una clave foránea y almacenar el identificador del propietario de cada tarea.
+Después, conéctate a esa base de datos y ejecuta el siguiente SQL para crear las tablas necesarias:
+
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    titulo VARCHAR(200) NOT NULL,
+    descripcion TEXT,
+    fecha_vencimiento DATE,
+    estado VARCHAR(20) NOT NULL DEFAULT 'pendiente',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT tasks_estado_check
+        CHECK (estado IN ('pendiente', 'en curso', 'completada'))
+);
+```
+
+La tabla `users` almacena los usuarios registrados. La tabla `tasks` relaciona cada tarea con su propietario mediante `usuario_id`. Si se elimina un usuario, PostgreSQL elimina también sus tareas relacionadas.
+
 
 ## Variables de entorno
 
@@ -70,8 +96,6 @@ DB_PASSWORD=tu_contraseña
 JWT_SECRET=tu_secreto_seguro
 JWT_EXPIRES_IN=1h
 ```
-
-Ajusta los nombres de las variables para que coincidan con la configuración que utiliza el proyecto.
 
 **Importante:** no publiques el archivo `.env`, contraseñas ni secretos JWT en el repositorio.
 
