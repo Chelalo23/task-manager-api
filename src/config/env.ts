@@ -1,3 +1,4 @@
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -23,18 +24,17 @@ class Config {
         this.dbUser = process.env.DB_USER ?? "";
         this.dbPassword = process.env.DB_PASSWORD ?? "";
         this.jwtSecret = process.env.JWT_SECRET ?? "";
-        this.jwtExpiresIn = process.env.JWT_SECRET ?? "1h";
-        this.nodeEnv = process.env.NODE_ENV ?? "development"; 
+        this.jwtExpiresIn = process.env.JWT_EXPIRES_IN ?? "1h";
+        this.nodeEnv = process.env.NODE_ENV ?? "development";
     }
 
-    static getIstance(): Config {
+    static getInstance(): Config {
         if (!Config.instance) {
             Config.instance = new Config();
         }
 
         return Config.instance;
     }
-
 }
 
-export const config = Config.getIstance();
+export const config = Config.getInstance();
