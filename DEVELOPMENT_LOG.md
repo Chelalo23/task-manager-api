@@ -161,15 +161,26 @@ Durante el desarrollo se obtuvieron los siguientes resultados:
 - Las validaciones rechazaron datos de tareas incorrectos.
 - La consulta de una tarea inexistente devolvió el mensaje de error esperado.
 - Swagger mostró las operaciones documentadas de autenticación y gestión de tareas.
+- Actualización correcta de una tarea propia mediante PUT.
+- Persistencia de los cambios al consultar mediante GET.
+- Eliminación correcta de una tarea temporal mediante DELETE.
+- Respuesta 404 al consultar la tarea eliminada.
+- Confirmación de que las tareas de otros usuarios están protegidas.
+- Compilación final exitosa con npm.cmd run build.
+- Repositorio sincronizado con GitHub y sin cambios pendientes.
 
-Estos resultados corresponden a las verificaciones realizadas durante el desarrollo. Antes de la entrega final se debe completar una revisión general de los endpoints y del repositorio.
+Estos resultados corresponden a las verificaciones realizadas durante el desarrollo. 
+Las pruebas manuales principales, la compilación final y la revisión del estado del repositorio se completaron. 
+Queda pendiente preparar y grabar el video explicativo de la prueba técnica y añadir su enlace cuando esté disponible.
 
 ## 6. Tareas pendientes para la entrega
 
-- Revisar que `.env.example` coincida con las variables utilizadas por la aplicación.
-- Ejecutar una ronda final de pruebas de los endpoints.
-- Verificar que el README corresponda con la configuración actual.
-- Revisar los cambios pendientes en Git.
-- Crear el commit final y subir los cambios a GitHub.
-- Preparar el video explicativo de la solución.
+- [x] Revisar el archivo `.env.example` para comprobar que contiene las variables necesarias sin exponer credenciales reales.
+- [x] Revisar la coherencia del `README.md` con la estructura y el funcionamiento de la API.
+- [x] Completar las pruebas manuales principales de autenticación, validaciones, CRUD y aislamiento entre usuarios.
+- [x] Ejecutar la compilación final mediante `npm.cmd run build`.
+- [x] Verificar que el repositorio esté sincronizado con GitHub y sin cambios pendientes.
+- [ ] Revisar el historial de conversación disponible para recuperar los prompts literales de IA que puedan documentarse con certeza. No inventar citas textuales.
+- [ ] Preparar y grabar el video explicativo de la prueba técnica.
+- [ ] Añadir al registro el enlace del video cuando esté disponible.
 
