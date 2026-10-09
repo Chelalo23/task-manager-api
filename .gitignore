@@ -1,0 +1,16 @@
+
+# Variables de entorno y secretos
+.env
+.env.*
+
+# Permitir el ejemplo de configuración
+!.env.example
+
+# Dependencias
+node_modules/
+
+# Archivos generados por TypeScript
+dist/
+
+# Archivos y registros temporales
+*.log
